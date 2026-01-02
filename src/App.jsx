@@ -1,14 +1,10 @@
 
 import './App.css'
-import ProductCard from './components/productCard'
-
+import AdminPage from './components/adminPage'
 function App() {
 
   return (
-    <>
-      <ProductCard name="cap" price="3500/-" description="description of the cap"/>
-      <ProductCard />
-    </>
+    <AdminPage/>
   )
 }
 
