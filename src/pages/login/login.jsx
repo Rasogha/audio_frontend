@@ -20,8 +20,9 @@ export default function LoginPage(){ // email and password is changing frequentl
                 password: password
             }).then((res)=>{
                 console.log(res) //status code should be 200 nmbers to do this
-                toast.success("Login Successfull")
+                toast.success("Login Successfull") //alert
                 const user = res.data.user
+                localStorage.setItem("token",res.data.token)
 
                 if(user.role === "admin"){
                     //window.location.href = "/admin/"  //this is a problem. because this refresh the page. so we use useNavigate
