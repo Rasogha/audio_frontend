@@ -15,7 +15,7 @@ export default function AdminItemsPage() {
             const token = localStorage.getItem("token")
             axios.get("http://localhost:3000/api/products", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: "Bearer ${token}"
                 }
             })
             .then((res) => {

@@ -28,13 +28,14 @@ export default function AddProductPage() {
                 description: productDescription
             },{
                 headers : {
-                    Authorization: "Bearer" + token
+                    Authorization: "Bearer " + token
                 }
             })
-           toast.success(result.response.meessage)
+           toast.success(result.data.message)
            navigate("/admin/items")
 
         } catch(err){
+            console.log(err)
             toast.error(err.response.data.error)
         }
 

@@ -13,8 +13,9 @@ export default function LoginPage(){ // email and password is changing frequentl
     function handleOnSubmit(e){
         e.preventDefault() //stop the refreshing, can use Enter button
         console.log(email,password)
+        const backendUrl = import.meta.env.VITE_BACKEND-URL
 
-        axios.post("http://localhost:3000/api/users/login",
+        axios.post(backendUrl + "/api/users/login",
             {
                 email : email,
                 password: password
@@ -44,10 +45,10 @@ export default function LoginPage(){ // email and password is changing frequentl
             <div className="w-[400px] h-[400px] backdrop-blur-xl ronded-2xl flex justify-center items-center flex-col relative">
                 <img src='../../public/logo.png' alt='logo' className='w-[100px] h-[100px] absolute top-1'
                 />
-                <input type='email' placeholder='Email' className='w-[300px] h-[30px] bg-transparent border-b-2 border-white mt-6 text-white text-xl outline-none'
+                <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} className='w-[300px] h-[30px] bg-transparent border-b-2 border-white mt-6 text-white text-xl outline-none'
                 />
 
-                <input type='password' placeholder='password' className='w-[300px] h-[30px] bg-transparent border-b-2 border-white mt-6 text-white text-xl outline-none'
+                <input type='password' placeholder='password' value={password} onChange={(e) => setPassword(e.target.value)}className='w-[300px] h-[30px] bg-transparent border-b-2 border-white mt-6 text-white text-xl outline-none'
                 />
                 
                 <button className='my-8 w-[300px] h-[50px] bg-[#efac38] text-2xl text-white rounded-lg'>Login</button>
