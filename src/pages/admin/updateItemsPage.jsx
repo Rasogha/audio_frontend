@@ -1,17 +1,22 @@
 import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
-export default function AddProductPage() {
-    const [productKey, setProductKey] = useState("")
-    const [productName, setProductName] = useState("")
-    const [productPrice, setProductPrice] = useState(0)
-    const [productCategory, setProductCategory] = useState("audio")
-    const [productDimensions, setProductDimensions] = useState("")
-    const [productDescription, setProductDescription] = useState("")
+export default function UpdateItemsPage() {
+    const location = useLocation()   // JSON file that bring data from other location
+
+
+    const [productKey, setProductKey] = useState(location.state.key)
+    const [productName, setProductName] = useState(location.state.name)
+    const [productPrice, setProductPrice] = useState(location.state.price)
+    const [productCategory, setProductCategory] = useState(location.state.category)
+    const [productDimensions, setProductDimensions] = useState(location.state.dimensions)
+    const [productDescription, setProductDescription] = useState(location.state.description)
+    const [itemsLoaded, setItemsLoaded] = useState(false)
 
     const navigate = useNavigate()
+    
 
     async function handleAddItem(){
         console.log(productKey,productName, productPrice, productCategory, productDimensions, productDescription)
@@ -19,18 +24,19 @@ export default function AddProductPage() {
 
         if(token){
         try{    
-            const result = await axios.post("http://localhost:3000/api/products",{
-                key: productKey,
-                name: productName,
-                price: productPrice,
-                category: productCategory,
-                dimensions: productDimensions,
-                description: productDescription
-            },{
-                headers : {
-                    Authorization: "Bearer" + token
-                }
-            })
+            const result = await axios.put("http://localhost:3000/api/products/"+productKey,
+                {
+                    key: productKey,
+                    name: productName,
+                    price: productPrice,
+                    category: productCategory,
+                    dimensions: productDimensions,
+                    description: productDescription
+                },{
+                    headers : {
+                        Authorization: "Bearer" + token
+                    }
+                })
            toast.success(result.response.meessage)
            navigate("/admin/items")
 
@@ -43,12 +49,13 @@ export default function AddProductPage() {
     }
 }
     return (
-        <div className="w-full h-full bg-amber-300 flex flex-col items-center">
-            <h1 className="text-xl font-bold mb-4">Add Items</h1>
-
-            <div className="bg-amber-600 w-[400px] flex flex-col items-stretch gap-3 p-4 rounded">
+    <div className="w-full h-full p-6 relative flex flex-col items-center">
+        {!itemsLoaded &&<div className="border-4 my-4 w-[100px] h-[100px] border-b-green-500 rounded-full animate-spin bg-0 "></div>}
+            <div className="overflow-x-auto">
+                <div className="bg-amber-600 w-[400px] flex flex-col items-stretch gap-3 p-4 rounded">
                 
                 <input
+                    disabled
                     type="text"
                     placeholder="Product Key"
                     value={productKey}
@@ -94,12 +101,12 @@ export default function AddProductPage() {
                 <button onClick={handleAddItem}
                         className="bg-black text-white px-4 py-2 rounded"
                 >
-                    Add
+                    Update Item
                 </button>
                 <button onClick={()=>{navigate("/admin/items")}}className="bg-red-900 text-white px-4 py-2 rounded">
                     Cancle
                 </button>
             </div>
+            
         </div>
-    )
-}
+    </div>)}
