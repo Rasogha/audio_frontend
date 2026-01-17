@@ -12,10 +12,11 @@ export default function AdminItemsPage() {
     useEffect(() => {
 
         if(!itemsLoaded){    
+            const backendUrl = import.meta.env.VITE_BACKEND_URL
             const token = localStorage.getItem("token")
-            axios.get("http://localhost:3000/api/products", {
+            axios.get(backendUrl + "/api/products", {
                 headers: {
-                    Authorization: "Bearer ${token}"
+                    Authorization: "Bearer "+ token
                 }
             })
             .then((res) => {
@@ -33,9 +34,10 @@ export default function AdminItemsPage() {
         if(window.confirm("Are you want to delete")){
             setItems(items.filter((item)=>item.key !== key))
             const token = localStorage.getItem("token")
-            axios.delete('http://localhost:3000/api/products/${key}', {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL
+            axios.delete(backendUrl + `/api/products/${key}`, {
                 headers: {
-                    Authorization: 'Bearer ${token}'},
+                    Authorization: `Bearer ${token}`},
             })
             .then((res)=>{
                 console.log(res.data)
@@ -81,7 +83,7 @@ export default function AdminItemsPage() {
                                     <td className="px-4 py-2 text-center space-x-2">
                                         <button 
                                         onClick={()=>{
-                                            navigate('/admin/items/edit'),{state:product}        //bring data through pages
+                                            navigate('/admin/items/edit',{state:product})        //bring data through pages
                                         }}className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
                                         >
                                             Edit

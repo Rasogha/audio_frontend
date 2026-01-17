@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 
 export default function UpdateItemsPage() {
     const location = useLocation()   // JSON file that bring data from other location
-
+    const navigate = useNavigate()
 
     const [productKey, setProductKey] = useState(location.state.key)
     const [productName, setProductName] = useState(location.state.name)
@@ -15,7 +15,7 @@ export default function UpdateItemsPage() {
     const [productDescription, setProductDescription] = useState(location.state.description)
     const [itemsLoaded, setItemsLoaded] = useState(false)
 
-    const navigate = useNavigate()
+    
     
 
     async function handleAddItem(){
@@ -24,7 +24,8 @@ export default function UpdateItemsPage() {
 
         if(token){
         try{    
-            const result = await axios.put("http://localhost:3000/api/products/"+productKey,
+            const backEndUrl = import.meta.env.VITE_BACKEND_URL
+            const result = await axios.put(backEndUrl + "/api/products/"+productKey,
                 {
                     key: productKey,
                     name: productName,
@@ -34,10 +35,10 @@ export default function UpdateItemsPage() {
                     description: productDescription
                 },{
                     headers : {
-                        Authorization: "Bearer" + token
+                        Authorization: "Bearer " + token
                     }
                 })
-           toast.success(result.response.meessage)
+           toast.success(result.data.meessage || "Item updated successfully")
            navigate("/admin/items")
 
         } catch(err){

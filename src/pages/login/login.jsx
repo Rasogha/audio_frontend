@@ -13,9 +13,9 @@ export default function LoginPage(){ // email and password is changing frequentl
     function handleOnSubmit(e){
         e.preventDefault() //stop the refreshing, can use Enter button
         console.log(email,password)
-        const backendUrl = import.meta.env.VITE_BACKEND-URL
+        const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-        axios.post(backendUrl + "/api/users/login",
+        axios.post( backendUrl + '/api/users/login',
             {
                 email : email,
                 password: password
