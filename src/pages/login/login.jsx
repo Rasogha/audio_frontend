@@ -15,7 +15,7 @@ export default function LoginPage(){ // email and password is changing frequentl
         console.log(email,password)
         const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-        axios.post( backendUrl + '/api/users/login',
+        axios.post( `${backendUrl}/api/users/login`,
             {
                 email : email,
                 password: password

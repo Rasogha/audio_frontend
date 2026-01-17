@@ -14,7 +14,7 @@ export default function AdminItemsPage() {
         if(!itemsLoaded){    
             const backendUrl = import.meta.env.VITE_BACKEND_URL
             const token = localStorage.getItem("token")
-            axios.get(backendUrl + "/api/products", {
+            axios.get(`${backendUrl}/api/products`, {
                 headers: {
                     Authorization: "Bearer "+ token
                 }
@@ -35,7 +35,7 @@ export default function AdminItemsPage() {
             setItems(items.filter((item)=>item.key !== key))
             const token = localStorage.getItem("token")
             const backendUrl = import.meta.env.VITE_BACKEND_URL
-            axios.delete(backendUrl + `/api/products/${key}`, {
+            axios.delete(`${backendUrl}/api/products/${key}`, {
                 headers: {
                     Authorization: `Bearer ${token}`},
             })

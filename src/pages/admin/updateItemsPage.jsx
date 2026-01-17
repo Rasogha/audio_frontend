@@ -35,7 +35,7 @@ export default function UpdateItemsPage() {
                     description: productDescription
                 },{
                     headers : {
-                        Authorization: "Bearer " + token
+                        Authorization: `Bearer ${token}`
                     }
                 })
            toast.success(result.data.meessage || "Item updated successfully")

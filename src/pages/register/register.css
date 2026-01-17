@@ -8,7 +8,13 @@
     z-index: 1;
 }
 
-.inout_field{
+.input_field{
     width: 300px;
-    height: 30px;   
+    height: 30px;
+    margin-top: 15px;
+    background: transparent;
+    border-bottom: 2px solid white;
+    color: white;
+    font-size: 1.2rem;
+    outline: none;
 }
