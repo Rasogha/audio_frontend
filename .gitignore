@@ -8,8 +8,11 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-.env
 supabase.txt
+# Ignore all .env files
+.env
+.env.local
+.env.*.local
 
 dist
 dist-ssr
