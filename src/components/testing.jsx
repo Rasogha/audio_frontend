@@ -1,51 +1,20 @@
 import { useState } from "react"
+import mediaUpload from "../utils/mediaUpload"
 
 export default function Testing(){
-    const[count,setCount] = useState(0) //count should be started from '0'
-                                        //setCount function will do two works
-    const [itemName, setItemName] = useState('coconut')
+    const [file, setFile] = useState(null)
+
+    function uploadFile(){
+        console.log(file.name)
+        mediaUpload(file)
+    }
 
     return(
-        <div className="w-full h-screen bg-orange-100 flex flex-col justify-center items-center
-        ">
-            <h1 className="text-9xl text-white">{count} {itemName}</h1>
-
-            <button className="w-[200px] h-[60px] bg-black text-3xl text-white rounded-lg" onClick={
-                ()=>{
-                    const newCount = count + 1
-                    setCount(newCount)
-
-                }
-                
-            }>
-                Count
+        <div className="w-full h-screen bg-orange-100 flex flex-col justify-center items-center">
+            <input type="file" onChange={(e)=>{setFile(e.target.files[0])}} className="border-1 "/>
+            <button onClick={uploadFile} className="w-[200px] h-[50px] bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+                Upload File
             </button>
-            <div className=" p-4 w-full flex justify-evenly">
-                <button className="w-[200px] h-[60px] bg-black text-3xl text-white rounded-lg" onClick ={
-                    ()=> {
-                        setItemName('coconut')
-                        
-                    }
-                }>coconut</button>
-                <button className="w-[200px] h-[60px] bg-black text-3xl text-white rounded-lg" onClick ={
-                    ()=> {
-                        setItemName('banana')
-                        
-                    }
-                }>banana</button>
-                <button className="w-[200px] h-[60px] bg-black text-3xl text-white rounded-lg" onClick ={
-                    ()=> {
-                        setItemName('apple')
-                        
-                    }
-                }>apple</button>
-                <button className="w-[200px] h-[60px] bg-black text-3xl text-white rounded-lg" onClick ={
-                    ()=> {
-                        setItemName('other')
-                        
-                    }
-                }>other</button>
-            </div>
         </div>
     )
 }
