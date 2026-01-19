@@ -2,6 +2,7 @@ import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
+import mediaUpload from "../../utils/mediaUpload"
 
 export default function AddProductPage() {
     const [productKey, setProductKey] = useState("")
@@ -10,26 +11,52 @@ export default function AddProductPage() {
     const [productCategory, setProductCategory] = useState("audio")
     const [productDimensions, setProductDimensions] = useState("")
     const [productDescription, setProductDescription] = useState("")
+    const [productImages, setProductImages] = useState([])
 
     const navigate = useNavigate()
 
     async function handleAddItem(){
-        console.log(productKey,productName, productPrice, productCategory, productDimensions, productDescription)
+        const promises = []
+
+        for(let i=0; i<productImages.length; i++){
+            console.log(productImages[i])
+            const promise = mediaUpload(productImages[i])
+            promises.push(promise)
+            // if(i == 25){
+            //     toast.error("Maximum 25 images are allowed")
+            //     break
+            // }
+        }
+
+        const result = await Promise.all(promises)
+
+       
+
+
         const token = localStorage.getItem("token")
         const backEndUrl = import.meta.env.VITE_BACKEND_URL
 
         if(token){
-        try{    
+        try{  
+            
+            // Promise.all(promises).then((result)=>{
+            //     console.log("All images uploaded:", result) // Array of public URLs
+            // }).catch((err)=>{
+            //     toast.error(err)
+            // })
+            const imageUrls = await Promise.all(promises)
+           
             const result = await axios.post(`${backEndUrl}/api/products`,{
                 key: productKey,
                 name: productName,
                 price: productPrice,
                 category: productCategory,
                 dimensions: productDimensions,
-                description: productDescription
+                description: productDescription,
+                image: imageUrls,
             },{
                 headers : {
-                    Authorization: "Bearer " + token
+                    Authorization: `Bearer ${token}`
                 }
             })
            toast.success(result.data.message)
@@ -92,6 +119,12 @@ export default function AddProductPage() {
                     value={productDescription}
                     onChange={(e) => setProductDescription(e.target.value)}
                 />
+
+                <input type="file" multiple
+                    onChange={(e) => {setProductImages(e.target.files)}} className="w-full p-2 border rounded"
+                />
+                
+            
 
                 <button onClick={handleAddItem}
                         className="bg-black text-white px-4 py-2 rounded"
