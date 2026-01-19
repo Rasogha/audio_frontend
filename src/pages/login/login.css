@@ -1,5 +1,5 @@
 .bg-picture{
-    background-image: url('../../public/loginBg.jpg');
+    background-image: url('/loginBg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
