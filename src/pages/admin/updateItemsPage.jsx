@@ -2,6 +2,7 @@ import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import { useLocation, useNavigate } from "react-router-dom"
+import mediaUpload from "../../utils/mediaUpload"
 
 export default function UpdateItemsPage() {
     const location = useLocation()   // JSON file that bring data from other location
@@ -14,12 +15,31 @@ export default function UpdateItemsPage() {
     const [productDimensions, setProductDimensions] = useState(location.state.dimensions)
     const [productDescription, setProductDescription] = useState(location.state.description)
     const [itemsLoaded, setItemsLoaded] = useState(false)
-
+    const [productImages, setProductImages] = useState([])
     
     
 
-    async function handleAddItem(){
-        console.log(productKey,productName, productPrice, productCategory, productDimensions, productDescription)
+    async function handleUpdateItem(){
+        
+    let updatingImages = location.state.image
+
+    if(productImages.length > 0){    
+        const promises = []
+        //check if any image is added or not
+        for(let i = 0; i < productImages.length; i++){
+            console.log(productImages[i])
+            const promise = mediaUpload(productImages[i])
+            promises.push(promise)
+        }
+        updatingImages = await Promise.all(promises)   
+    }
+            
+        console.log(productKey,
+            productName,
+             productPrice,
+              productCategory,
+               productDimensions,
+                productDescription)
         const token = localStorage.getItem("token")
 
         if(token){
@@ -27,12 +47,14 @@ export default function UpdateItemsPage() {
             const backEndUrl = import.meta.env.VITE_BACKEND_URL
             const result = await axios.put(backEndUrl + "/api/products/"+productKey,
                 {
-                    key: productKey,
+                    
                     name: productName,
                     price: productPrice,
                     category: productCategory,
                     dimensions: productDimensions,
-                    description: productDescription
+                    description: productDescription,
+                    image: updatingImages
+
                 },{
                     headers : {
                         Authorization: `Bearer ${token}`
@@ -99,7 +121,13 @@ export default function UpdateItemsPage() {
                     onChange={(e) => setProductDescription(e.target.value)}
                 />
 
-                <button onClick={handleAddItem}
+                <input type="file" 
+                        multiple
+                        onChange={(e) => {setProductImages(e.target.files)}}
+                        className="w-full p-2 border rounded"
+                />
+
+                <button onClick={handleUpdateItem}
                         className="bg-black text-white px-4 py-2 rounded"
                 >
                     Update Item
