@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { useLocation, useNavigate } from "react-router-dom"
 import mediaUpload from "../../utils/mediaUpload"
@@ -17,63 +17,75 @@ export default function UpdateItemsPage() {
     const [itemsLoaded, setItemsLoaded] = useState(false)
     const [productImages, setProductImages] = useState([])
     
-    
+    useEffect(() => {
+        if (location.state) {
+            // Simulate a slight delay or just set to true immediately
+            setItemsLoaded(true);
+        } else {
+            // If someone accesses this page without state, send them back
+            toast.error("No product data found");
+            navigate("/admin/items");
+        }
+    }, [location.state, navigate]);
 
     async function handleUpdateItem(){
         
-    let updatingImages = location.state.image
+        let updatingImages = location.state.image
 
-    if(productImages.length > 0){    
-        const promises = []
-        //check if any image is added or not
-        for(let i = 0; i < productImages.length; i++){
-            console.log(productImages[i])
-            const promise = mediaUpload(productImages[i])
-            promises.push(promise)
+        if(productImages.length > 0){    
+            const promises = []
+            //check if any image is added or not
+            for(let i = 0; i < productImages.length; i++){
+                console.log(productImages[i])
+                const promise = mediaUpload(productImages[i])
+                promises.push(promise)
+            }
+            updatingImages = await Promise.all(promises)  
         }
-        updatingImages = await Promise.all(promises)   
-    }
-            
-        console.log(productKey,
-            productName,
-             productPrice,
-              productCategory,
-               productDimensions,
-                productDescription)
-        const token = localStorage.getItem("token")
+                
+            console.log(productKey,
+                productName,
+                productPrice,
+                productCategory,
+                productDimensions,
+                    productDescription)
+            const token = localStorage.getItem("token")
 
-        if(token){
-        try{    
-            const backEndUrl = import.meta.env.VITE_BACKEND_URL
-            const result = await axios.put(backEndUrl + "/api/products/"+productKey,
-                {
-                    
-                    name: productName,
-                    price: productPrice,
-                    category: productCategory,
-                    dimensions: productDimensions,
-                    description: productDescription,
-                    image: updatingImages
+            if(token){
+            try{    
+                const backEndUrl = import.meta.env.VITE_BACKEND_URL
+                const result = await axios.put(backEndUrl + "/api/products/"+productKey,
+                    {
+                        
+                        name: productName,
+                        price: productPrice,
+                        category: productCategory,
+                        dimensions: productDimensions,
+                        description: productDescription,
+                        image: updatingImages
 
-                },{
-                    headers : {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-           toast.success(result.data.meessage || "Item updated successfully")
-           navigate("/admin/items")
+                    },{
+                        headers : {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+            toast.success(result.data.meessage || "Item updated successfully")
+            navigate("/admin/items")
 
-        } catch(err){
-            toast.error(err.response.data.error)
+            } catch(err){
+                toast.error(err.response.data.error)
+            }
+
+        }else{
+            toast.error("You are not authorized")
         }
-
-    }else{
-        toast.error("You are not authorized")
-    }
 }
     return (
-    <div className="w-full h-full p-6 relative flex flex-col items-center">
-        {!itemsLoaded &&<div className="border-4 my-4 w-[100px] h-[100px] border-b-green-500 rounded-full animate-spin bg-0 "></div>}
+    <div className="w-full h-full p-6 relative flex flex-col items-center justify-center">
+        {
+            !itemsLoaded && <div className="border-4 my-4 w-[100px] h-[100px] border-b-green-500 rounded-full animate-spin bg-0"></div>
+        }
+        {itemsLoaded &&     
             <div className="overflow-x-auto">
                 <div className="bg-amber-600 w-[400px] flex flex-col items-stretch gap-3 p-4 rounded">
                 
@@ -137,5 +149,5 @@ export default function UpdateItemsPage() {
                 </button>
             </div>
             
-        </div>
+        </div>}
     </div>)}
