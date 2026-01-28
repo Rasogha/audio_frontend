@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ImageSlider from "../../components/imageSlider";
+import { addToCart, loadCart } from "../../utils/cart";
+import toast from "react-hot-toast";
 
 export default function ProductOverview() {
     const params = useParams(); //catch the key that passed through URL
@@ -38,6 +40,12 @@ export default function ProductOverview() {
                     <p className="text-md text-gray-500 mt-4">{product.description}</p>
                     <p className="text-sm font-bold text-gray-700">{product.price}</p>
                     <span className="font-medium">Dimensions {product.dimensions}</span>
+                    <button className="mt-4 bg-accent text-white px-4 py-2 rounded-md hover:shadow-xl transition cursor-pointer" 
+                    onClick={()=>{
+                            addToCart(product.key, 1)
+                            toast.success("Item added to cart")
+                        }}>Add to Cart
+                    </button>
                 </div>
             </div>
         }

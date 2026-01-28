@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { addToCart, loadCart } from "../utils/cart";
+import toast from "react-hot-toast";
 
 export default function ProductCard({ item }) {
     return (
@@ -34,7 +36,7 @@ export default function ProductCard({ item }) {
                 {/* Price & Availability */}
                 <div className="flex justify-between items-center mt-4">
                     <span className="text-xl font-bold text-[#efac38]">
-                        Rs. {item.price}
+                        Rs. {item.price.toFixed(2)}
                     </span>
 
                     <span
@@ -62,8 +64,15 @@ export default function ProductCard({ item }) {
                     className={`mt-4 w-full h-[40px] rounded-lg text-white text-sm font-semibold 
                     ${item.availability 
                         ? "bg-[#efac38] hover:bg-[#d9982f]" 
-                        : "bg-gray-400 cursor-not-allowed"}`}
-                >
+                        : "bg-gray-400 cursor-not-allowed"}`
+                    // Onc={(item) => {
+                        
+                    }
+                     onClick={()=>{
+                            addToCart(item.key, 1)
+                            toast.success("Item added to cart")
+                    }}> 
+                
                     Add to Cart
                 </button>
             </div>
