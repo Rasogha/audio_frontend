@@ -39,7 +39,7 @@ export default function RegisterPage() {
                 <div className="w-[400px] h-[550px] backdrop-blur-xl rounded-2xl flex justify-center items-center flex-col relative">
                     
                     <img
-                        src='../../public/logo.png'
+                        src='/logo.png'
                         alt='logo'
                         className='w-[100px] h-[100px] absolute top-1 '
                     />

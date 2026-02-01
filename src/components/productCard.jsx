@@ -1,6 +1,10 @@
+import { Link } from "react-router-dom";
+import { addToCart, loadCart } from "../utils/cart";
+import toast from "react-hot-toast";
+
 export default function ProductCard({ item }) {
     return (
-        <div className="w-[280px] h-[400px] bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 m-4 flex flex-col">
+        <div className="w-[280px] h-wrap bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 m-4 flex flex-col">
             
             {/* Product Image */}
             <div className="w-full h-[200px] bg-gray-100 flex items-center justify-center">
@@ -32,7 +36,7 @@ export default function ProductCard({ item }) {
                 {/* Price & Availability */}
                 <div className="flex justify-between items-center mt-4">
                     <span className="text-xl font-bold text-[#efac38]">
-                        Rs. {item.price}
+                        Rs. {item.price.toFixed(2)}
                     </span>
 
                     <span
@@ -48,9 +52,27 @@ export default function ProductCard({ item }) {
                     disabled={!item.availability}
                     className={`mt-4 w-full h-[40px] rounded-lg text-white text-sm font-semibold 
                     ${item.availability 
-                        ? "bg-[#efac38] hover:bg-[#d9982f]" 
+                        ? "bg-[#4333f4] hover:bg-[#0e2640]" 
                         : "bg-gray-400 cursor-not-allowed"}`}
-                >
+                  //item.key is passed through URL  
+                ><Link to={`/product/${item.key}`}>      
+                    View Product
+                </Link>
+                </button>
+                <button
+                    disabled={!item.availability}
+                    className={`mt-4 w-full h-[40px] rounded-lg text-white text-sm font-semibold 
+                    ${item.availability 
+                        ? "bg-[#efac38] hover:bg-[#d9982f]" 
+                        : "bg-gray-400 cursor-not-allowed"}`
+                    // Onc={(item) => {
+                        
+                    }
+                     onClick={()=>{
+                            addToCart(item.key, 1)
+                            toast.success("Item added to cart")
+                    }}> 
+                
                     Add to Cart
                 </button>
             </div>
