@@ -43,7 +43,7 @@ export default function LoginPage(){ // email and password is changing frequentl
     <div className="bg-picture w-full h-screen flex justify-center items-center">
         <form onSubmit={handleOnSubmit}>  
             <div className="w-[400px] h-[400px] backdrop-blur-xl ronded-2xl flex justify-center items-center flex-col relative">
-                <img src='../../public/logo.png' alt='logo' className='w-[100px] h-[100px] absolute top-1'
+                <img src='/logo.png.' alt='logo' className='w-[100px] h-[100px] absolute top-1'
                 />
                 <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} className='w-[300px] h-[30px] bg-transparent border-b-2 border-white mt-6 text-white text-xl outline-none'
                 />
