@@ -27,7 +27,7 @@ export default function LoginPage(){ // email and password is changing frequentl
 
                 if(user.role === "admin"){
                     //window.location.href = "/admin/"  //this is a problem. because this refresh the page. so we use useNavigate
-                    navigate("/")
+                    navigate("/admin")
                 }else{
                     navigate("/")
                 }
