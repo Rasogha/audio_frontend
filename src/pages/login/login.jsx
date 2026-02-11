@@ -3,12 +3,34 @@ import './login.css'
 import { useState } from "react"
 import toast from 'react-hot-toast' //Alert displaying
 import { useNavigate } from 'react-router-dom'
+import { useGoogleLogin } from '@react-oauth/google'
 
 export default function LoginPage(){ // email and password is changing frequently
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    
     const navigate = useNavigate()
+    const googleLogin = useGoogleLogin(
+        {
+            onSuccess : (res)=>{
+                console.log(res)
+                axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users/google`,{
+                    accessToken : res.access_token
+                }).then((res)=>{
+                    console.log(res)
+                    toast.success("Login Success")
+                    const user = res.data.user
+                    localStorage.setItem("token",res.data.token)
+                    if(user.role === "admin"){
+                        navigate("/admin")
+                    }else{
+                        navigate("/")
+                    }
+                }).catch((err)=>{
+                    console.log(err)
+                })
+            }
+        }
+    )
 
     function handleOnSubmit(e){
         e.preventDefault() //stop the refreshing, can use Enter button
@@ -51,7 +73,9 @@ export default function LoginPage(){ // email and password is changing frequentl
                 <input type='password' placeholder='password' value={password} onChange={(e) => setPassword(e.target.value)}className='w-[300px] h-[30px] bg-transparent border-b-2 border-white mt-6 text-white text-xl outline-none'
                 />
                 
-                <button className='my-8 w-[300px] h-[50px] bg-[#efac38] text-2xl text-white rounded-lg'>Login</button>
+                <button className='my-8 w-[300px] h-[50px] bg-[#efac38] text-2xl text-white rounded-lg cursor-pointer'>Login</button>
+                <div className='my-8 w-[300px] h-[50px] bg-[#efac38] text-2xl text-white rounded-lg cursor-pointer' onClick={googleLogin}>Login with Google</div>
+
             </div>
         </form>
     </div>
